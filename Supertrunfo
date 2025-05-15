@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <string.h>
+
+// Definindo a estrutura da carta
+typedef struct {
+    char estado[50];
+    char codigo[20];
+    char nome[50];
+    int populacao;
+    float area;
+    float pib;
+    int pontos_turisticos;
+    float densidade_populacional;
+    float pib_per_capita;
+} Carta;
+
+// Função para calcular densidade populacional e PIB per capita
+void calcular_dados(Carta *c) {
+    c->densidade_populacional = c->populacao / c->area;
+    c->pib_per_capita = c->pib / c->populacao;
+}
+
+// Função para cadastrar uma carta
+void cadastrar_carta(Carta *c) {
+    printf("Digite o estado: ");
+    fgets(c->estado, 50, stdin);
+    c->estado[strcspn(c->estado, "\n")] = 0;
+
+    printf("Digite o código da carta: ");
+    fgets(c->codigo, 20, stdin);
+    c->codigo[strcspn(c->codigo, "\n")] = 0;
+
+    printf("Digite o nome da cidade: ");
+    fgets(c->nome, 50, stdin);
+    c->nome[strcspn(c->nome, "\n")] = 0;
+
+    printf("Digite a população: ");
+    scanf("%d", &c->populacao);
+
+    printf("Digite a área: ");
+    scanf("%f", &c->area);
+
+    printf("Digite o PIB: ");
+    scanf("%f", &c->pib);
+
+    printf("Digite o número de pontos turísticos: ");
+    scanf("%d", &c->pontos_turisticos);
+    getchar();  // Limpa o buffer
+
+    calcular_dados(c);
+}
+
+// Função para comparar um atributo fixo (PIB per capita)
+void comparar_atributo(Carta c1, Carta c2) {
+    printf("\nComparando as cartas pelo PIB per capita...\n");
+    if (c1.pib_per_capita > c2.pib_per_capita) {
+        printf("%s (%s) tem um PIB per capita maior.\n", c1.nome, c1.estado);
+    } else if (c2.pib_per_capita > c1.pib_per_capita) {
+        printf("%s (%s) tem um PIB per capita maior.\n", c2.nome, c2.estado);
+    } else {
+        printf("Ambas as cidades têm o mesmo PIB per capita.\n");
+    }
+}
+
+int main() {
+    Carta carta1, carta2;
+    printf("Cadastro da Carta 1:\n");
+    cadastrar_carta(&carta1);
+
+    printf("\nCadastro da Carta 2:\n");
+    cadastrar_carta(&carta2);
+
+    // Exibindo as informações calculadas
+    printf("\nDensidade populacional e PIB per capita calculados:\n");
+    printf("%s (Estado: %s) - Densidade: %.2f hab/km², PIB per capita: R$ %.2f\n", carta1.nome, carta1.estado, carta1.densidade_populacional, carta1.pib_per_capita);
+    printf("%s (Estado: %s) - Densidade: %.2f hab/km², PIB per capita: R$ %.2f\n", carta2.nome, carta2.estado, carta2.densidade_populacional, carta2.pib_per_capita);
+
+    // Comparando atributo
+    comparar_atributo(carta1, carta2);
+
+    return 0;
+}
